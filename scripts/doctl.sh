@@ -1,0 +1,1 @@
+doctl compute droplet create iot-droplet --size s-2vcpu-4gb --image ubuntu-23-10-x64 --region lon1 --enable-backups --user-data-file cloudinit.yml
