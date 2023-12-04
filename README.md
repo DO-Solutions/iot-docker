@@ -44,14 +44,14 @@ Based on: https://github.com/Miceuz/docker-compose-mosquitto-influxdb-telegraf-g
 # Quick / Easy version
 
 1. Clone this repo `git clone https://github.com/DO-Solutions/iot-docker`
-2. Run these commands:
+2. Enter the directory `cd iot-docker`
+3. Deploy the Droplet
 
 ```
-cd iot-docker
-```
-
-```
-doctl compute droplet create iot-droplet --size s-2vcpu-4gb --image ubuntu-23-10-x64 --region lon1 --enable-backups --user-data-file cloudinit.yml
+doctl compute droplet create iot-droplet \
+--size s-2vcpu-4gb --image ubuntu-23-10-x64 \
+--region lon1 --enable-backups \
+--user-data-file cloudinit.yml
 ```
 
 
