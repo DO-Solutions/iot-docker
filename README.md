@@ -1,38 +1,63 @@
-# Easy IoT data infrastructure setup via docker
+# DigitalOcean IoT Docker
+<!-- <div id="top"></div> -->
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Don't forget to give the project a star!
+*** Thanks again! Now go create something AMAZING! :D
+-->
 
-Based on https://github.com/iothon/docker-compose-mqtt-influxdb-grafana and https://lucassardois.medium.com/handling-iot-data-with-mqtt-telegraf-influxdb-and-grafana-5a431480217
+
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://digitalocean.com/">
+    <img src="./assets/DO_Logo-Blue.png" alt="Logo" >
+  </a>
+
+<h3 align="center">DigitalOcean | IoT Docker</h3>
+
+  <p align="center">
 
 This docker compose installs and sets up:
 - [Eclipse Mosquitto](https://mosquitto.org) - An open source MQTT broker to collect your data via MQTT protocol
 - [InfluxDB](https://www.influxdata.com/) - The Time Series Data Platform to store your data in time series database 
 - [Telegraf](https://www.influxdata.com/time-series-platform/telegraf/) - The open source server agent to connect Mosquitto and InfluxDB together
 - [Grafana](https://grafana.com/) - The open observability platform to draw some graphs and more
+  
+  </p>
+</div>
 
-# Setup process
-## Install docker
+# Getting Started
 
-```
-sudo apt install docker.io
-sudo apt install docker-compose 
+
+## Architecture diagram
+
+
+## Prerequisites
+
+1. A DigitalOcean account ([Log in](https://cloud.digitalocean.com/login))
+2. doctl CLI([tutorial](https://docs.digitalocean.com/reference/doctl/how-to/install/))
+
+# Quick / Easy version
+
+1. Fork this [docker-cron](https://github.com/DO-Solutions/docker-cron) repo
+2. Add the following to your [App Spec](https://docs.digitalocean.com/products/app-platform/reference/app-spec/) (yaml):
+
+```yaml
+workers:
+- dockerfile_path: Dockerfile
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: <your-github-username>/docker-cron
+  instance_count: 1
+  instance_size_slug: basic-xxs
+  name: docker-cron
+  source_dir: /
 ```
 
-```
-sudo usermod -aG docker iothon
-```
-
-## Clone this repository
-
-```
-git clone https://github.com/Miceuz/docker-compose-mosquitto-influxdb-telegraf-grafana.git
-```
-
-## Run it
-
-To download, setup and start all the services run
-```
-cd docker-compose-mosquitto-influxdb-telegraf-grafana
-sudo docker-compose up -d
-```
 
 To check the running setvices run
 ```
@@ -60,7 +85,7 @@ Username and pasword are admin:admin. You should see a graph of the data you hav
 ### InfluxDB
 You can poke around your InfluxDB setup here:
 `http://<your-server-ip>:8086`
-Username and password are user:password1234
+Username and password are found in `docker-compose.yml``
 
 # Configuration 
 ### Mosquitto 
@@ -71,66 +96,23 @@ allow_anonymous true
 ```
 
 ### InfluxDB 
-The configuration is fully in `docker-compose.yml`. Note the `DOCKER_INFLUXDB_INIT_ADMIN_TOKEN` - you can run a test with the one given, but you better re-generate it for your own security. This same token is repeated in several other config files, you have to update it there also. I did not find an easy way to generate it automagically in docker yet. **Change it before you go live**. You have been warned. Also change the username and password.
-```
-  influxdb:
-    image: influxdb
-    container_name: influxdb
-    restart: always
-    ports:
-      - "8086:8086"
-    networks:
-      - iot
-    volumes:
-      - influxdb-data:/var/lib/influxdb2
-      - influxdb-config:/etc/influxdb2
-    environment:
-      - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=user
-      - DOCKER_INFLUXDB_INIT_PASSWORD=password1234
-      - DOCKER_INFLUXDB_INIT_ORG=some_org
-      - DOCKER_INFLUXDB_INIT_BUCKET=some_data
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=4eYvsu8wZCJ6tKuE2sxvFHkvYFwSMVK0011hEEiojvejzpSaij86vYQomN_12au6eK-2MZ6Knr-Sax201y70w==
-
-```
+The configuration is fully in `docker-compose.yml`.
 
 ### Telegraf 
-Telegraf is responsible for piping mqtt messages to influxdb. It is set up to listen for topic `paper_wifi/test`. You can alter this configuration according to your needs, check the official documentation on how to do that. Note the InfluxDB token you have to update.
-```
-[[inputs.mqtt_consumer]]
-  servers = ["tcp://mosquitto:1883"]
-  topics = [
-    "paper_wifi/test/#"
-  ]
-  data_format = "json"
-
-[[outputs.influxdb_v2]]
-  urls = ["http://influxdb:8086"]
-  token = "4eYvsu8wZCJ6tKuE2sxvFHkvYFwSMVK0011hEEiojvejzpSaij86vYQomN_12au6eK-2MZ6Knr-Sax201y70w=="
-  organization = "some_org"
-  bucket = "some_data"
-
-```
+Telegraf is responsible for piping mqtt messages to influxdb. It is set up to listen for topic `paper_wifi/test`. You can alter this configuration according to your needs, check the official documentation on how to do that.
 
 ### Grafana data source 
-Grafana is provisioned with a default data source pointing to the InfluxDB instance installed in this same compose. The configuration file is `grafana-provisioning/datasources/automatic.yml`. Note the InfluxDB token you have to update. 
-```
-apiVersion: 1
-
-datasources:
-  - name: InfluxDB_v2_Flux
-    type: influxdb
-    access: proxy
-    url: http://influxdb:8086
-    jsonData:
-      version: Flux
-      organization: some_org
-      defaultBucket: some_data
-      tlsSkipVerify: true
-    secureJsonData:
-      token: 4eYvsu8wZCJ6tKuE2sxvFHkvYFwSMVK0011hEEiojvejzpSaij86vYQomN_12au6eK-2MZ6Knr-Sax201y70w==
-```
+Grafana is provisioned with a default data source pointing to the InfluxDB instance installed in this same compose. The configuration file is `grafana-provisioning/datasources/automatic.yml`.
 
 ### Grafana dashboard
 Default Grafana dashboard is also set up in this directory: `grafana-provisioning/dashboards`
 
+
+
+
+<!-- CONTACT -->
+# Contact
+
+Jack Pearce, Solutions Engineer - jpearce@digitalocean.com
+
+<p align="right">(<a href="#top">back to top</a>)</p>
