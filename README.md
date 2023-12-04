@@ -72,15 +72,16 @@ sudo docker container exec mosquitto mosquitto_pub -t 'paper_wifi/test/' -m '{"h
 Open in your browser: 
 `http://<your-server-ip>:3000`
 
-Username is `admin`
+Username is `admin`\
+
 Password can be found in `/iot-docker/grafanapassword.txt`
 
 You should see a graph of the data you have entered with the `mosquitto_pub` command.
 
 ### InfluxDB
 
-You can poke around your InfluxDB setup here:
-`http://<your-server-ip>:8086`
+You can poke around your InfluxDB setup here: `http://<your-server-ip>:8086` \
+
 Username and password are found in `docker-compose.yml``
 
 # Configuration
