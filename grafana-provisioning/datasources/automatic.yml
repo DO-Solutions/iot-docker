@@ -11,4 +11,4 @@ datasources:
       defaultBucket: some_data
       tlsSkipVerify: true
     secureJsonData:
-      token: token_here
+      token:
