@@ -56,14 +56,14 @@ doctl compute droplet create iot-droplet \
 ```
 
 
-To check the running setvices run
+To check the running services run
 ```
-sudo docker ps
+docker ps
 ```
 
 To shutdown the whole thing run
 ```
-sudo docker-compose down
+docker-compose down
 ```
 
 ## Test your setup
