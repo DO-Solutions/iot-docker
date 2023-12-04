@@ -27,6 +27,8 @@ runcmd:
   # Run docker-compose in detached mode
   - docker-compose up -d
 
+  # Sleep for 10 seconds to allow InfluxDB and Grafana to start, securely generate Grafana admin password and reset it
+
   - |
     sleep 10
     export GRAFANA_PASSWORD=$(openssl rand -hex 16) && docker exec grafana grafana-cli admin reset-admin-password "$GRAFANA_PASSWORD"
