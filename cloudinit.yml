@@ -8,7 +8,7 @@ runcmd:
   - git clone https://github.com/jkpe/iot-docker
   - cd iot-docker && git checkout dev 
   - |
-    export INFLUXDB_ADMIN_TOKEN=$(openssl rand -hex 24) && export INFLUXDB_USERNAME=$(openssl rand -hex 8) && export INFLUXDB_PASSWORD=$(openssl rand -hex 8) && sed -i 's/DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=/DOCKER_INFLUXDB_INIT_ADMIN_TOKEN='$INFLUXDB_ADMIN_TOKEN'/g' docker-compose.yml && sed -i 's/DOCKER_INFLUXDB_INIT_USERNAME=/DOCKER_INFLUXDB_INIT_USERNAME='$INFLUXDB_USERNAME'/g' docker-compose.yml && sed -i 's/DOCKER_INFLUXDB_INIT_PASSWORD=/DOCKER_INFLUXDB_INIT_PASSWORD='$INFLUXDB_PASSWORD'/g' docker-compose.yml && sed -i 's/token = \"\"/token = \"'$INFLUXDB_ADMIN_TOKEN'\"/g' telegraf.conf && echo '      token: '"$INFLUXDB_ADMIN_TOKEN" >> automatic.yml
+    export INFLUXDB_ADMIN_TOKEN=$(openssl rand -hex 24) && export INFLUXDB_USERNAME=$(openssl rand -hex 8) && export INFLUXDB_PASSWORD=$(openssl rand -hex 8) && sed -i 's/DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=/DOCKER_INFLUXDB_INIT_ADMIN_TOKEN='$INFLUXDB_ADMIN_TOKEN'/g' docker-compose.yml && sed -i 's/DOCKER_INFLUXDB_INIT_USERNAME=/DOCKER_INFLUXDB_INIT_USERNAME='$INFLUXDB_USERNAME'/g' docker-compose.yml && sed -i 's/DOCKER_INFLUXDB_INIT_PASSWORD=/DOCKER_INFLUXDB_INIT_PASSWORD='$INFLUXDB_PASSWORD'/g' docker-compose.yml && sed -i 's/token = \"\"/token = \"'$INFLUXDB_ADMIN_TOKEN'\"/g' telegraf.conf && echo '      token: '"$INFLUXDB_ADMIN_TOKEN" >> grafana-provisioning/datasources/automatic.yml
   - docker-compose up -d
 
 
