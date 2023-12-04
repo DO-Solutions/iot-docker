@@ -21,13 +21,14 @@
   <p align="center">
 
 This docker compose installs and sets up:
-- [Eclipse Mosquitto](https://mosquitto.org) - An open source MQTT broker to collect your data via MQTT protocol
-- [InfluxDB](https://www.influxdata.com/) - The Time Series Data Platform to store your data in time series database 
-- [Telegraf](https://www.influxdata.com/time-series-platform/telegraf/) - The open source server agent to connect Mosquitto and InfluxDB together
-- [Grafana](https://grafana.com/) - The open observability platform to draw some graphs and more
-  
+[Eclipse Mosquitto](https://mosquitto.org) - An open source MQTT broker to collect your data via MQTT protocol
+[InfluxDB](https://www.influxdata.com/) - The Time Series Data Platform to store your data in time series database 
+[Telegraf](https://www.influxdata.com/time-series-platform/telegraf/) - The open source server agent to connect Mosquitto and InfluxDB together
+[Grafana](https://grafana.com/) - The open observability platform to draw some graphs and more
   </p>
 </div>
+
+Based on: https://github.com/Miceuz/docker-compose-mosquitto-influxdb-telegraf-grafana
 
 # Getting Started
 
@@ -38,7 +39,7 @@ This docker compose installs and sets up:
 ## Prerequisites
 
 1. A DigitalOcean account ([Log in](https://cloud.digitalocean.com/login))
-2. doctl CLI([tutorial](https://docs.digitalocean.com/reference/doctl/how-to/install/))
+2. doctl CLI ([tutorial](https://docs.digitalocean.com/reference/doctl/how-to/install/))
 
 # Quick / Easy version
 
