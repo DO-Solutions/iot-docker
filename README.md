@@ -55,16 +55,12 @@ doctl compute droplet create iot-droplet \
 --user-data-file cloudinit.yml
 ```
 
+To check on your deployment SSH into your Droplet and run `tail -f /var/log/cloud-init-output.log`
 
-To check the running services run
-```
-docker ps
-```
+To check the running services run `cd /iot-docker && docker ps`
 
-To shutdown the whole thing run
-```
-docker-compose down
-```
+To shutdown the whole thing `cd /iot-docker && docker-compose down`
+
 
 ## Test your setup
 
