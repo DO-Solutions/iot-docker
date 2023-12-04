@@ -12,7 +12,7 @@ services:
       - iot
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
-  
+
   influxdb:
     image: influxdb
     container_name: influxdb
@@ -31,7 +31,7 @@ services:
       - DOCKER_INFLUXDB_INIT_ORG=some_org
       - DOCKER_INFLUXDB_INIT_BUCKET=some_data
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=
-  
+
   telegraf:
     image: telegraf
     container_name: telegraf
@@ -43,7 +43,7 @@ services:
       - influxdb
     networks:
       - iot
-  
+
   grafana:
     image: grafana/grafana
     container_name: grafana
