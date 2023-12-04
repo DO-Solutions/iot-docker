@@ -33,9 +33,7 @@ Based on: https://github.com/Miceuz/docker-compose-mosquitto-influxdb-telegraf-g
 
 # Getting Started
 
-
 ## Architecture diagram
-
 
 ## Prerequisites
 
@@ -48,7 +46,7 @@ Based on: https://github.com/Miceuz/docker-compose-mosquitto-influxdb-telegraf-g
 2. Enter the directory `cd iot-docker`
 3. Deploy the Droplet
 
-```
+```bash
 doctl compute droplet create iot-droplet \
 --size s-2vcpu-4gb --image ubuntu-23-10-x64 \
 --region lon1 --enable-backups \
@@ -61,46 +59,56 @@ To check the running services run `cd /iot-docker && docker ps`
 
 To shutdown the whole thing `cd /iot-docker && docker-compose down`
 
-
 ## Test your setup
 
-Post some messages into your Mosquitto so you'll be able to see some data in Grafana already: 
-```
+Post some messages into your Mosquitto so you'll be able to see some data in Grafana already:
+
+```bash
 sudo docker container exec mosquitto mosquitto_pub -t 'paper_wifi/test/' -m '{"humidity":21, "temperature":21, "battery_voltage_mv":3000}'
 ```
 
 ### Grafana
+
 Open in your browser: 
 `http://<your-server-ip>:3000`
 
-Username and pasword are admin:admin. You should see a graph of the data you have entered with the `mosquitto_pub` command.
+Username is `admin`
+Password can be found in `/iot-docker/grafanapassword.txt`
+
+You should see a graph of the data you have entered with the `mosquitto_pub` command.
 
 ### InfluxDB
+
 You can poke around your InfluxDB setup here:
 `http://<your-server-ip>:8086`
 Username and password are found in `docker-compose.yml``
 
-# Configuration 
-### Mosquitto 
+# Configuration
+
+### Mosquitto
+
 Mosquitto is configured to allow anonymous connections and posting of messages
-```
+
+```yaml
 listener 1883
 allow_anonymous true
 ```
 
-### InfluxDB 
+### InfluxDB
+
 The configuration is fully in `docker-compose.yml`.
 
-### Telegraf 
+### Telegraf
+
 Telegraf is responsible for piping mqtt messages to influxdb. It is set up to listen for topic `paper_wifi/test`. You can alter this configuration according to your needs, check the official documentation on how to do that.
 
-### Grafana data source 
+### Grafana data source
+
 Grafana is provisioned with a default data source pointing to the InfluxDB instance installed in this same compose. The configuration file is `grafana-provisioning/datasources/automatic.yml`.
 
 ### Grafana dashboard
+
 Default Grafana dashboard is also set up in this directory: `grafana-provisioning/dashboards`
-
-
 
 
 <!-- CONTACT -->

@@ -29,5 +29,5 @@ runcmd:
 
   - |
     sleep 10
-    export GRAFANA_PASSWORD=$(openssl rand -hex 16) && docker exec -ti grafana grafana-cli admin reset-admin-password "$GRAFANA_PASSWORD"
+    export GRAFANA_PASSWORD=$(openssl rand -hex 16) && docker exec grafana grafana-cli admin reset-admin-password "$GRAFANA_PASSWORD"
     echo $GRAFANA_PASSWORD > /iot-docker/grafanapassword.txt
