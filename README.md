@@ -66,7 +66,7 @@ doctl compute droplet create iot-droplet \
 
 ## Test your setup
 
-1. 1. Post messages into Mosquitto to see data in Grafana:
+1. Post messages into Mosquitto to see data in Grafana:
 
 ```bash
 sudo docker container exec mosquitto mosquitto_pub -t 'paper_wifi/test/' -m '{"humidity":21, "temperature":21, "battery_voltage_mv":3000}'
