@@ -1,22 +1,10 @@
 #!/bin/bash
 
-# Update package lists and upgrade all packages
-apt-get update && apt-get upgrade
-
-# Download Docker installation script
-curl -fsSL https://get.docker.com -o get-docker.sh
-
-# Execute the Docker installation script
-sh get-docker.sh
-
-# Update package lists and install docker-compose and git
-apt-get update && apt-get install -y docker-compose git
-
 # Clone the iot-docker repository from GitHub
 git clone https://github.com/DO-Solutions/iot-docker
 
 # Change directory to iot-docker and checkout the main branch
-cd iot-docker && git checkout main 
+cd iot-docker && git checkout master 
 
 # Set environment variables with random values and modify docker-compose.yml and telegraf.conf
 # with these values for InfluxDB and Grafana configuration
