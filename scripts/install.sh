@@ -1,35 +1,40 @@
 #!/bin/bash
 
-# Update and install necessary packages
-apt-get update
-apt-get install -y docker-compose git make
+# Update package lists and upgrade all packages
+apt-get update && apt-get upgrade
 
-# Install Docker using the official Docker script
+# Download Docker installation script
 curl -fsSL https://get.docker.com -o get-docker.sh
+
+# Execute the Docker installation script
 sh get-docker.sh
 
-# Clone the IoT Docker repository
-git clone https://github.com/jkpe/docker-compose-mosquitto-influxdb-telegraf-grafana
-cd docker-compose-mosquitto-influxdb-telegraf-grafana
+# Update package lists and install docker-compose and git
+apt-get update && apt-get install -y docker-compose git
 
-# Generate random values for InfluxDB settings
+# Clone the iot-docker repository from GitHub
+git clone https://github.com/DO-Solutions/iot-docker
+
+# Change directory to iot-docker and checkout the main branch
+cd iot-docker && git checkout main 
+
+# Set environment variables with random values and modify docker-compose.yml and telegraf.conf
+# with these values for InfluxDB and Grafana configuration
 export INFLUXDB_ADMIN_TOKEN=$(openssl rand -hex 24)
-export INFLUXDB_USERNAME=$(openssl rand -hex 8)
-export INFLUXDB_PASSWORD=$(openssl rand -hex 8)
-
-# Replace default values in docker-compose.yml with generated values
+export INFLUXDB_USERNAME=$(openssl rand -hex 16)
+export INFLUXDB_PASSWORD=$(openssl rand -hex 16)
 sed -i 's/DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=/DOCKER_INFLUXDB_INIT_ADMIN_TOKEN='$INFLUXDB_ADMIN_TOKEN'/g' docker-compose.yml
-sed -i 's/DOCKER_INFLUXDB_INIT_USERNAME=default/DOCKER_INFLUXDB_INIT_USERNAME='$INFLUXDB_USERNAME'/g' docker-compose.yml
-sed -i 's/DOCKER_INFLUXDB_INIT_PASSWORD=default/DOCKER_INFLUXDB_INIT_PASSWORD='$INFLUXDB_PASSWORD'/g' docker-compose.yml
+sed -i 's/DOCKER_INFLUXDB_INIT_USERNAME=/DOCKER_INFLUXDB_INIT_USERNAME='$INFLUXDB_USERNAME'/g' docker-compose.yml
+sed -i 's/DOCKER_INFLUXDB_INIT_PASSWORD=/DOCKER_INFLUXDB_INIT_PASSWORD='$INFLUXDB_PASSWORD'/g' docker-compose.yml
+sed -i 's/token = ""/token = "'$INFLUXDB_ADMIN_TOKEN'"/g' telegraf.conf
+echo '      token: '"$INFLUXDB_ADMIN_TOKEN" >> grafana-provisioning/datasources/automatic.yml
 
-# Replace the token in telegraf.conf
-sed -i 's/token = \"\"/token = \"'$INFLUXDB_ADMIN_TOKEN'\"/g' telegraf.conf
-
-# Replace the token in grafana-provisioning/datasources/automatic.yml
-sed -i 's/token: /token: '$INFLUXDB_ADMIN_TOKEN'/g' grafana-provisioning/datasources/automatic.yml
-
-# Start IoT using Docker Compose
+# Run docker-compose in detached mode
 docker-compose up -d
 
-# Navigate back to the script's original directory
-cd -
+# Sleep for 10 seconds to allow InfluxDB and Grafana to start
+# Securely generate Grafana admin password and reset it
+sleep 10
+export GRAFANA_PASSWORD=$(openssl rand -hex 16)
+docker exec grafana grafana-cli admin reset-admin-password "$GRAFANA_PASSWORD"
+echo $GRAFANA_PASSWORD > /iot-docker/grafanapassword.txt
