@@ -44,6 +44,26 @@ Based on: https://github.com/Miceuz/docker-compose-mosquitto-influxdb-telegraf-g
 
 Instead of manually deploying a new Droplet, you can run `scripts/install.sh` on an existing DigitalOcean Droplet to set up the environment. This script automates the installation process.
 
+1. Update package lists and upgrade all packages
+
+```bash
+apt-get update && apt-get upgrade
+```
+
+2. Download and install Docker
+
+```bash
+curl -fsSL https://get.docker.com -o get-docker.sh
+```
+
+3. Install docker-compose and git
+
+```bash
+apt-get update && apt-get install -y docker-compose git
+```
+
+4. Run the installation script for this project
+
 ```bash
 curl -sSL https://github.com/DO-Solutions/iot-docker/raw/master/scripts/install.sh | bash
 ```
