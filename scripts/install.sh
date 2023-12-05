@@ -25,4 +25,5 @@ docker-compose up -d
 sleep 10
 export GRAFANA_PASSWORD=$(openssl rand -hex 16)
 docker exec grafana grafana-cli admin reset-admin-password "$GRAFANA_PASSWORD"
+mkdir /iot-docker
 echo $GRAFANA_PASSWORD > /iot-docker/grafanapassword.txt
