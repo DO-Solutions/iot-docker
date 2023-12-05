@@ -37,14 +37,14 @@ Based on: https://github.com/Miceuz/docker-compose-mosquitto-influxdb-telegraf-g
 
 ## Prerequisites
 
-1. A DigitalOcean account ([Log in](https://cloud.digitalocean.com/login))
-2. doctl CLI ([tutorial](https://docs.digitalocean.com/reference/doctl/how-to/install/))
+1. A DigitalOcean account - [Sign up here](https://cloud.digitalocean.com)
+2. doctl CLI - [Installation guide](https://docs.digitalocean.com)
 
-# Quick / Easy version
+## Quick / Easy version
 
-1. Clone this repo `git clone https://github.com/DO-Solutions/iot-docker`
-2. Enter the directory `cd iot-docker`
-3. Deploy the Droplet
+1. Clone this repo: `git clone https://github.com/DO-Solutions/iot-docker`
+2. Enter the directory: `cd iot-docker`
+3. Deploy the Droplet using the following command:
 
 ```bash
 doctl compute droplet create iot-droplet \
@@ -53,19 +53,20 @@ doctl compute droplet create iot-droplet \
 --user-data-file cloudinit.yml
 ```
 
-To check on your deployment SSH into your Droplet and run `tail -f /var/log/cloud-init-output.log`
-
-To check the running services run `cd /iot-docker && docker ps`
-
-To shutdown the whole thing `cd /iot-docker && docker-compose down`
+4. To check on your deployment SSH into your Droplet and run `tail -f /var/log/cloud-init-output.log`
+5. To check the running services run `cd /iot-docker && docker ps`
+6. To shutdown the whole thing `cd /iot-docker && docker-compose down`
 
 ## Test your setup
 
-Post some messages into your Mosquitto so you'll be able to see some data in Grafana already:
+1. 1. Post messages into Mosquitto to see data in Grafana:
 
 ```bash
 sudo docker container exec mosquitto mosquitto_pub -t 'paper_wifi/test/' -m '{"humidity":21, "temperature":21, "battery_voltage_mv":3000}'
 ```
+
+2. Access Grafana at `http://<your-server-ip>:3000`. Username: `admin`, Password: `/iot-docker/grafanapassword.txt`.
+3. Explore InfluxDB at `http://<your-server-ip>:8086`. Credentials in `docker-compose.yml`.
 
 ### Grafana
 
@@ -88,7 +89,8 @@ Username and password are found in `docker-compose.yml`
 
 ### Mosquitto
 
-Mosquitto is configured to allow anonymous connections and posting of messages
+- Allows anonymous connections.
+- Configured to listen on port 1883.
 
 ```yaml
 listener 1883
@@ -97,19 +99,19 @@ allow_anonymous true
 
 ### InfluxDB
 
-The configuration is fully in `docker-compose.yml`.
+- Configuration details are available in `docker-compose.yml`.
 
 ### Telegraf
 
-Telegraf is responsible for piping mqtt messages to influxdb. It is set up to listen for topic `paper_wifi/test`. You can alter this configuration according to your needs, check the official documentation on how to do that.
+- Set up to pipe MQTT messages to InfluxDB.
+- Listens for topic `paper_wifi/test`.
+- Configuration can be modified as per the official documentation.
 
 ### Grafana data source
 
-Grafana is provisioned with a default data source pointing to the InfluxDB instance installed in this same compose. The configuration file is `grafana-provisioning/datasources/automatic.yml`.
-
-### Grafana dashboard
-
-Default Grafana dashboard is also set up in this directory: `grafana-provisioning/dashboards`
+- Comes with a default data source pointing to InfluxDB.
+- Configuration: `grafana-provisioning/datasources/automatic.yml`.
+- Default dashboard setup in `grafana-provisioning/dashboards`.
 
 
 <!-- CONTACT -->
