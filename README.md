@@ -40,7 +40,14 @@ Based on: https://github.com/Miceuz/docker-compose-mosquitto-influxdb-telegraf-g
 1. A DigitalOcean account - [Sign up here](https://cloud.digitalocean.com)
 2. doctl CLI - [Installation guide](https://docs.digitalocean.com)
 
-## Quick / Easy version
+## Running on an Existing Droplet
+
+Instead of manually deploying a new Droplet, you can run `scripts/install.sh` on an existing DigitalOcean Droplet to set up the environment. This script automates the installation process.
+
+
+## Deploying a New Droplet
+
+To deploy a new Droplet with the necessary software installed:
 
 1. Clone this repo: `git clone https://github.com/DO-Solutions/iot-docker`
 2. Enter the directory: `cd iot-docker`
