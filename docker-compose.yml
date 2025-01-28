@@ -2,7 +2,7 @@ version: "3"
 
 services:
   mosquitto:
-    image: eclipse-mosquitto:latest
+    image: eclipse-mosquitto:2.0.20
     container_name: mosquitto
     restart: always
     ports:
@@ -14,7 +14,7 @@ services:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
 
   influxdb:
-    image: influxdb
+    image: influxdb:2.7.11
     container_name: influxdb
     restart: always
     ports:
@@ -33,7 +33,7 @@ services:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=
 
   telegraf:
-    image: telegraf
+    image: telegraf:1.33.1
     container_name: telegraf
     restart: always
     volumes:
@@ -45,7 +45,7 @@ services:
       - iot
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:11.4.0
     container_name: grafana
     restart: always
     ports:
