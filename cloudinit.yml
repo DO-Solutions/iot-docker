@@ -10,9 +10,6 @@ runcmd:
   # Execute the Docker installation script
   - sh get-docker.sh
 
-  # Update package lists and install docker-compose and git
-  - apt-get update && apt-get install -y docker-compose git
-
   # Clone the iot-docker repository from GitHub
   - git clone https://github.com/DO-Solutions/iot-docker
 
