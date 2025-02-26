@@ -33,7 +33,7 @@ services:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=
 
   telegraf:
-    image: telegraf:1.33.1
+    image: telegraf:1.33.3
     container_name: telegraf
     restart: always
     volumes:
